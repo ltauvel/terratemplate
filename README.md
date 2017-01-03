@@ -1,2 +1,7 @@
 # Terratemplate
-Terratemplate is a command-line tool that helps you generating infrastructure based on Terraform templates.
+
+`terratemplate` is as a command line utility written in [Go](https://github.com/golang/go) and is aimed at 
+providing template management functionality when working with 
+[Terraform](https://www.terraform.io). 
+
+
