@@ -280,7 +280,7 @@ func main() {
 				{
 					Name:    "create",
 					Aliases: []string{"c"},
-					Usage:   "instanciate the specified template",
+					Usage:   "instantiate the specified template",
 					Before:	 func(c *cli.Context) error {
 								Intiallize(c)
 								
