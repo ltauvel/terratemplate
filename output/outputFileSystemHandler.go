@@ -37,7 +37,7 @@ func (handler OutputFileSystemHandler) List(templateName string, instanceId stri
 		if len(templateName) == 0 || template.Name == templateName {
 		
 			// Looking for the instances in the current template directory	
-			_, instances := template.Read()
+			_, instances := template.Read(false)
 			for _, instance := range instances {
 				if len(instanceId) == 0 ||  instance.Name == instanceId + handler.Extension() {
 					result = append(result, &Output{

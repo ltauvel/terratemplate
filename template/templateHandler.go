@@ -5,4 +5,5 @@ type ITemplateHandler interface {
 	Get(templateName string) *Template
 	List(templateName string) []*Template
 	Copy(source Template, destination string, force bool) Template
+	HasChanged(source Template, comparepath string) bool
 }

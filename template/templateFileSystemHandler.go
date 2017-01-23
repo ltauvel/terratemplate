@@ -1,6 +1,7 @@
 package template
 
 import (
+	"github.com/ltauvel/gomodules/crypto"
 	"github.com/ltauvel/gomodules/console"
 	"github.com/ltauvel/gomodules/filesystem"
 )
@@ -40,6 +41,15 @@ func (handler TemplateFileSystemHandler) List(templateName string) []*Template {
 	}
 	
 	return result
+}
+
+func (handler TemplateFileSystemHandler) HasChanged(source Template, comparepath string) bool {
+	ignoreItems := []string{
+		"\\.(plan|tfstate|backup)$",
+		"^\\.terraform$",
+	}
+	
+	return string(crypto.GetDirectoryChecksum(source.FullName, true, ignoreItems...)) != string(crypto.GetDirectoryChecksum(comparepath, true, ignoreItems...))
 }
 
 func (handler TemplateFileSystemHandler) Copy(source Template, destination string, force bool) Template {

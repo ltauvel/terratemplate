@@ -42,6 +42,48 @@ func main() {
 	
 	app.Commands = []cli.Command{
 
+		// Templates commands
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		{
+			Name:    "test",
+			Aliases: []string{},
+			Usage:   "test",
+			Subcommands:	[]cli.Command{
+				{
+					Name:    "checksum",
+					Aliases: []string{"c"},
+					Usage:   "test checksum",
+					Before:	 func(c *cli.Context) error {
+								Intiallize(c)
+								return nil
+							 },
+					Action:  func(c *cli.Context) {
+								testchecksum()
+							 },
+					After:	 func(c *cli.Context) error {
+								Release(c)
+								return nil
+							 },
+				},
+				{
+					Name:    "readdir",
+					Aliases: []string{"c"},
+					Usage:   "test read dir",
+					Before:	 func(c *cli.Context) error {
+								Intiallize(c)
+								return nil
+							 },
+					Action:  func(c *cli.Context) {
+								testreaddir()
+							 },
+					After:	 func(c *cli.Context) error {
+								Release(c)
+								return nil
+							 },
+				},
+			},
+		},
+	
 		// Outputs commands
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
 		{
@@ -337,7 +379,68 @@ func main() {
 									Usage: "a `FILE` containing the password that will be used to decrypt the terraform files.",
 								},
 							},
-				},		
+				},	
+				{
+					Name:    "update",
+					Aliases: []string{"u"},
+					Usage:   "update the specified instance",
+					Before:	 func(c *cli.Context) error {
+								Intiallize(c)
+								
+								// Checking parameters
+								if len(ttcontext.TemplateName) == 0 {
+									console.PrintError("The template-name argument is mandatory.")
+								}
+								if len(ttcontext.InstanceId) == 0 {
+									console.PrintError("The instance-id argument is mandatory.")
+								}
+								if len(ttcontext.TemplatesPath) == 0 {
+									console.PrintError("Unable to determine the templates path.")
+								}
+								if len(ttcontext.InstancesPath) == 0 {
+									console.PrintError("Unable to determine the instances path.")
+								}
+								if len(ttcontext.BackupsPath) == 0 {
+									console.PrintError("Unable to determine the backups path.")
+								}
+								
+								return nil
+							 },
+					Action:  func(c *cli.Context) {
+								instance := TtInstanceManager{}
+								instance.Update()
+							 },
+					After:	 func(c *cli.Context) error {
+								Release(c)
+								return nil
+							 },
+					Flags:	[]cli.Flag{
+								cli.StringFlag{
+									Name:  "template-name, tn",
+									Usage: "the `NAME` of the template",
+								},
+								cli.StringFlag{
+									Name:  "instance-id, ii",
+									Usage: "the new template instance `ID`",
+								},
+								cli.StringSliceFlag{
+									Name:  "var",
+									Usage: "a `VAR` for the template. Can be used many times",
+								},
+								cli.BoolFlag{
+									Name:  "force, f",
+									Usage: "force the update even if the instance already exists",
+								},
+								cli.StringFlag{
+									Name:  "vault-password",
+									Usage: "a `PASSWORD` that will be used to decrypt the terraform files.",
+								},
+								cli.StringFlag{
+									Name:  "vault-password-file",
+									Usage: "a `FILE` containing the password that will be used to decrypt the terraform files.",
+								},
+							},
+				},
 				{
 					Name:    "dispose",
 					Aliases: []string{"d"},
